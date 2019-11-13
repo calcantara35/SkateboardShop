@@ -159,11 +159,31 @@ server.get("/reservations/all", (req, res) => {
     // TODO: sort the list here because it makes the most sense
     // asked professor about it.
 
-    completeResFile.forEach((reservation, index) => {
+    // when we make the client side code, we need to make a restriction on how the user is going to put in the date of the reservation because
+    // it can mess with the sorting.
+
+    // ***END OF IMPORTANT*** //
+
+    completeResFile.sort((res1, res2) => {
+      if (res1.date > res2.date) return 1;
+      if (res1.date < res2.date) return -1;
+
+      if (res1.time > res2.time) return 1;
+      if (res1.time > res2.time) return -1;
+    });
+
+    console.log(completeResFile);
+
+    completeResFile.forEach((value, index) => {
       res.write(
         `${index})\nUsername: ${completeResFile[index].name}\nReservation Date: ${completeResFile[index].date}\nReservation Time: ${completeResFile[index].time}\nReservation Duration: ${completeResFile[index].hours}\n`
       );
     });
+
+    // debating if we should do fs.write and make the actual json file sorted chronologically. It is not a requirement, just the data has to be chronological.
+
+    res.end("All reservations are in chronological order.");
+    console.log("success!");
   });
 });
 
