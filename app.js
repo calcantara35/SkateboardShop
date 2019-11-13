@@ -182,7 +182,7 @@ server.get("/reservations/all", (req, res) => {
 
     // debating if we should do fs.write and make the actual json file sorted chronologically. It is not a requirement, just the data has to be chronological.
 
-    res.end("All reservations are in chronological order.");
+    res.end("\nAll reservations are in chronological order.");
     console.log("success!");
   });
 });
