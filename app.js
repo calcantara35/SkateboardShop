@@ -31,7 +31,7 @@ server.get("/", (req, res) => {
 server.put("/register/new/:username", (req, res) => {
   let userName = req.params.username;
 
-  // checking to see if the file exists
+  // checking to see if the file exists | if its not there...
   if (!fs.existsSync(usersFile)) {
     // adding new user to empty object
     usersList.push({
@@ -82,7 +82,7 @@ server.post(
     let hours = req.params.resHours;
 
     //boolean var for validation
-    let userExists = false;
+    // let userExists = false;
 
     // fs.readFile(usersFile, (err, data) => {
     //   if (err) throw err;
@@ -154,6 +154,10 @@ server.get("/reservations/all", (req, res) => {
   fs.readFile(resFile, (err, data) => {
     if (err) throw err;
     let completeResFile = JSON.parse(data);
+
+    // ***IMPORTANT*** //
+    // TODO: sort the list here because it makes the most sense
+    // asked professor about it.
 
     completeResFile.forEach((reservation, index) => {
       res.write(
@@ -236,8 +240,6 @@ server.put(
 );
 
 // delete res file
-
-// update reservation for a given user
 server.delete("/reservation/delete/user/:username", (req, res) => {
   let userName = req.params.username;
 
