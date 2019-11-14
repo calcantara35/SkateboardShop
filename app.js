@@ -1,9 +1,13 @@
 // import express
 const express = require("express");
+const cors = require("cors");
 const fs = require("fs");
 
 // access express module
 const server = express();
+
+//middle-ware
+server.use(cors()); // still dont know if we can use this
 
 // port
 const port = 4500;
@@ -161,6 +165,8 @@ server.get("/reservations/all", (req, res) => {
 
     // when we make the client side code, we need to make a restriction on how the user is going to put in the date of the reservation because
     // it can mess with the sorting.
+
+    // also i think that we need to JSON.stringify this completeResFile because it wont send the data back right
 
     // ***END OF IMPORTANT*** //
 
