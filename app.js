@@ -207,7 +207,7 @@ server.get("/reservation/user/:username", (req, res) => {
       resFullList.forEach((reservation, index) => {
         if (reservation.name.toString() === userName) {
           res.send(
-            `Username: ${resFullList[index].name}\nReservation Date: ${resFullList[index].date}\nReservation Time: ${resFullList[index].time}\nReservation Duration: ${resFullList[index].hours}\n`
+            `Username: (${resFullList[index].name}\nReservation Date: ${resFullList[index].date}\nReservation Time: ${resFullList[index].time}\nReservation Duration: ${resFullList[index].hours}\n`
           );
           userExists === true;
         }
