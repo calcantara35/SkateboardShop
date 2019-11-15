@@ -26,13 +26,13 @@
   justify-content: center;
 }
 
-#userlabel {
+.label {
   font-weight: 700;
   font-size: large;
   margin-right: 1em;
 }
 
-#usernameVal {
+.inputVal {
   padding: 0.1em;
   border-radius: 5px;
   margin-left: 1em;

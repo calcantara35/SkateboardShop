@@ -120,7 +120,7 @@ server.post(
         console.log("Success");
       });
       res.send(
-        `The File ${resFile} has been created and the reservation for ${userName} has been added!`
+        `New file has been created and the reservation for ${userName} has been added!`
       );
     } else {
       // if it exists, read Reservation.json file
