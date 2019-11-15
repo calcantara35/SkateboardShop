@@ -23,11 +23,28 @@
         <div class="navbar-link">
           <a class="nav-item" href="newRes.html">New Reservation</a>
         </div>
-        <div class="navbar-link">
-          <a class="nav-item" href="deleteRes.html">Delete Reservation</a>
-        </div>
       </nav>
     </div>
-    <h1>Create an account:</h1>
+
+    <!-- create account -->
+    <div class="container mt-3">
+      <h1>Create an account</h1>
+    </div>
+
+    <div class="container mt-3">
+      <h2>Please enter a username to register for an account</h2>
+    </div>
+    <div class="container mt-3">
+      <label id="userlabel" for="name">Username: </label>
+      <input id="usernameVal" type="text" />
+    </div>
+
+    <div class="container mt-3">
+      <button class="btn btn-success" id="submitBtn">Submit</button>
+    </div>
+
+    <div id="alertContainer" class="container mt-3"></div>
+
+    <script src="newUser.js"></script>
   </body>
 </html>

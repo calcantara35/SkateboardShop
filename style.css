@@ -7,6 +7,16 @@
   margin-top: 1.5em;
 }
 
+.btn {
+  border-radius: 1em;
+  padding: 0.2em 3em 0.2em 3em;
+  font-size: 0.8em;
+}
+
+.btn-success {
+  background-color: #ffdb19;
+}
+
 /* Flex Container */
 .container {
   width: 100%;
@@ -16,8 +26,19 @@
   justify-content: center;
 }
 
-/* Text Center */
+#userlabel {
+  font-weight: 700;
+  font-size: large;
+  margin-right: 1em;
+}
 
+#usernameVal {
+  padding: 0.1em;
+  border-radius: 5px;
+  margin-left: 1em;
+}
+
+/* Text Center */
 .text-center {
   text-align: center;
 }

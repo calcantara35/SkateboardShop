@@ -32,7 +32,7 @@ server.get("/", (req, res) => {
 });
 
 // add new username
-server.put("/register/new/:username", (req, res) => {
+server.post("/register/new/:username", (req, res) => {
   let userName = req.params.username;
 
   // checking to see if the file exists | if its not there...
@@ -72,7 +72,7 @@ server.put("/register/new/:username", (req, res) => {
         console.log("Success!");
       });
     });
-    res.send(`User ${userName} has been added to system.`);
+    res.send("User has been created");
   }
 });
 
