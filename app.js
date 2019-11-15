@@ -180,15 +180,12 @@ server.get("/reservations/all", (req, res) => {
 
     console.log(completeResFile);
 
-    completeResFile.forEach((value, index) => {
-      res.write(
-        `${index})\nUsername: ${completeResFile[index].name}\nReservation Date: ${completeResFile[index].date}\nReservation Time: ${completeResFile[index].time}\nReservation Duration: ${completeResFile[index].hours}\n`
-      );
-    });
+    let sortedResFile = JSON.stringify(completeResFile);
+
+    res.end(sortedResFile);
 
     // debating if we should do fs.write and make the actual json file sorted chronologically. It is not a requirement, just the data has to be chronological.
 
-    res.end("\nAll reservations are in chronological order.");
     console.log("success!");
   });
 });
