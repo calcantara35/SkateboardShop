@@ -26,9 +26,7 @@ let resFile = "Reservation.json";
 
 // home page
 server.get("/", (req, res) => {
-  res.send(
-    "<h1>Welcome to the skateboard shop. Make some reservations today!</h1"
-  );
+  res.send("<h1>Welcome to the skateboard shop. Make some reservations today!</h1");
 });
 
 // add new username
@@ -47,9 +45,7 @@ server.put("/register/new/:username", (req, res) => {
       if (err) throw err;
       console.log("Success");
     });
-    res.send(
-      `The File ${usersFile} has been created and the user ${userName} has been added!`
-    );
+    res.send(`The File ${usersFile} has been created and the user ${userName} has been added!`);
   } else {
     // if it exists, read Users.json file
     fs.readFile(usersFile, (err, data) => {
@@ -77,81 +73,76 @@ server.put("/register/new/:username", (req, res) => {
 });
 
 // Create reservation
-server.post(
-  "/reservation/new/user/:username/date/:startDate/time/:startTime/hours/:resHours",
-  (req, res) => {
-    let userName = req.params.username;
-    let startDate = req.params.startDate;
-    let startTime = req.params.startTime;
-    let hours = req.params.resHours;
+server.post("/reservation/new/user/:username/date/:startDate/time/:startTime/hours/:resHours", (req, res) => {
+  let userName = req.params.username;
+  let startDate = req.params.startDate;
+  let startTime = req.params.startTime;
+  let hours = req.params.resHours;
 
-    //boolean var for validation
-    // let userExists = false;
+  //boolean var for validation
+  // let userExists = false;
 
-    // fs.readFile(usersFile, (err, data) => {
-    //   if (err) throw err;
-    //   let existingUser = JSON.parse(data);
-    //   existingUser.forEach(user => {
-    //     if (user.name.toString() === userName) {
-    //       userExists = true;
-    //     } else {
-    //       res.end(
-    //         "User does not exist, please create new user or make sure the username is correct!"
-    //       );
-    //     }
-    //   });
-    // });
+  // fs.readFile(usersFile, (err, data) => {
+  //   if (err) throw err;
+  //   let existingUser = JSON.parse(data);
+  //   existingUser.forEach(user => {
+  //     if (user.name.toString() === userName) {
+  //       userExists = true;
+  //     } else {
+  //       res.end(
+  //         "User does not exist, please create new user or make sure the username is correct!"
+  //       );
+  //     }
+  //   });
+  // });
 
-    // if (userExists === true) {
+  // if (userExists === true) {
 
-    // checking to see if the file exists
-    if (!fs.existsSync(resFile)) {
-      // adding new user to empty object
-      resList.push({
+  // checking to see if the file exists
+  if (!fs.existsSync(resFile)) {
+    // adding new user to empty object
+    resList.push({
+      name: userName,
+      date: startDate,
+      time: startTime,
+      hours
+    });
+
+    // creating the Reservation.json file
+    fs.writeFile(resFile, JSON.stringify(resList), err => {
+      if (err) throw err;
+      console.log("Success");
+    });
+    res.send(`The File ${resFile} has been created and the reservation for ${userName} has been added!`);
+  } else {
+    // if it exists, read Reservation.json file
+    fs.readFile(resFile, (err, data) => {
+      if (err) throw err;
+
+      // parsing through existing data and putting it in a variable and converting JSON object to JS object
+      let appendResList = JSON.parse(data);
+
+      // appending new user to existing file
+      appendResList.push({
         name: userName,
         date: startDate,
         time: startTime,
         hours
       });
 
-      // creating the Reservation.json file
-      fs.writeFile(resFile, JSON.stringify(resList), err => {
+      // converting js object back to JSON object
+      let appendResListInfo = JSON.stringify(appendResList);
+
+      // must be writefile or it will constantly create new objects
+      fs.writeFile(resFile, appendResListInfo, err => {
         if (err) throw err;
-        console.log("Success");
+        console.log("Success!");
       });
-      res.send(
-        `The File ${resFile} has been created and the reservation for ${userName} has been added!`
-      );
-    } else {
-      // if it exists, read Reservation.json file
-      fs.readFile(resFile, (err, data) => {
-        if (err) throw err;
-
-        // parsing through existing data and putting it in a variable and converting JSON object to JS object
-        let appendResList = JSON.parse(data);
-
-        // appending new user to existing file
-        appendResList.push({
-          name: userName,
-          date: startDate,
-          time: startTime,
-          hours
-        });
-
-        // converting js object back to JSON object
-        let appendResListInfo = JSON.stringify(appendResList);
-
-        // must be writefile or it will constantly create new objects
-        fs.writeFile(resFile, appendResListInfo, err => {
-          if (err) throw err;
-          console.log("Success!");
-        });
-      });
-      res.send(`Reservation for ${userName} has been added to system.`);
-    }
-    // }
+    });
+    res.send(`Reservation for ${userName} has been added to system.`);
   }
-);
+  // }
+});
 
 // get reservation for all users
 server.get("/reservations/all", (req, res) => {
@@ -195,72 +186,88 @@ server.get("/reservation/user/:username", (req, res) => {
   let userName = req.params.username;
   let userExists = false;
 
+  let userResList = [];
+  let stringUserResList;
+
   if (!fs.existsSync(resFile)) {
-    res.end(
-      "User does not exist and there are no reservations at this time..."
-    );
+    res.write("User does not exist and there are no reservations at this time...");
   } else {
     fs.readFile(resFile, (err, data) => {
       if (err) throw err;
 
       let resFullList = JSON.parse(data);
+      // object now
       resFullList.forEach((reservation, index) => {
         if (reservation.name.toString() === userName) {
-          res.send(
-            `Username: (${resFullList[index].name}\nReservation Date: ${resFullList[index].date}\nReservation Time: ${resFullList[index].time}\nReservation Duration: ${resFullList[index].hours}\n`
-          );
+          userResList.push(resFullList[index]);
+          console.log("geh");
+          console.log(userResList);
+
+          // res.write(JSON.stringify(resFullList[index]));
+
           userExists === true;
+
+          stringUserResList = JSON.stringify(userResList);
+          // res.write(
+          //   JSON.stringify(
+          //     `Username: (${resFullList[index].name}\nReservation Date: ${resFullList[index].date}\nReservation Time: ${resFullList[index].time}\nReservation Duration: ${resFullList[index].hours}\n`
+          //   )
+          // );
+          res.end(stringUserResList);
         }
+        // res.end()
+        console.log("final");
+        console.log(stringUserResList);
       });
+
+      // let resFullListString = JSON.stringify(resFullList);
       if (userExists === false) {
-        res.end("User Does Not Exists");
+        res.send("User Does Not Exists");
+        res.end()
       }
     });
   }
 });
 
 // update reservation for a given user
-server.put(
-  "/reservation/update/user/:username/date/:startDate/time/:startTime/hours/:resHours",
-  (req, res) => {
-    let userName = req.params.username;
-    let startDate = req.params.startDate;
-    let startTime = req.params.startTime;
-    let hours = req.params.resHours;
+server.put("/reservation/update/user/:username/date/:startDate/time/:startTime/hours/:resHours", (req, res) => {
+  let userName = req.params.username;
+  let startDate = req.params.startDate;
+  let startTime = req.params.startTime;
+  let hours = req.params.resHours;
 
-    let userExists = false;
+  let userExists = false;
 
-    if (!fs.existsSync(resFile)) {
-      res.end("There is no data for reservations.");
-    } else {
-      fs.readFile(resFile, (err, data) => {
-        if (err) throw err;
-        let fullResList = JSON.parse(data);
+  if (!fs.existsSync(resFile)) {
+    res.end("There is no data for reservations.");
+  } else {
+    fs.readFile(resFile, (err, data) => {
+      if (err) throw err;
+      let fullResList = JSON.parse(data);
 
-        fullResList.forEach((reservation, index) => {
-          if (reservation.name.toString() === userName) {
-            fullResList[index].date = startDate;
-            fullResList[index].time = startTime;
-            fullResList[index].hours = hours;
+      fullResList.forEach((reservation, index) => {
+        if (reservation.name.toString() === userName) {
+          fullResList[index].date = startDate;
+          fullResList[index].time = startTime;
+          fullResList[index].hours = hours;
 
-            let convertResList = JSON.stringify(fullResList);
-            res.send(`Reservation: ${convertResList}`);
+          let convertResList = JSON.stringify(fullResList);
+          res.send(`Reservation: ${convertResList}`);
 
-            userExists = true;
+          userExists = true;
 
-            fs.writeFile(resFile, convertResList, err => {
-              if (err) throw err;
-              console.log("Updated File");
-            });
-          }
-        });
-        if (userExists === false) {
-          res.end("User does not exist.");
+          fs.writeFile(resFile, convertResList, err => {
+            if (err) throw err;
+            console.log("Updated File");
+          });
         }
       });
-    }
+      if (userExists === false) {
+        res.end("User does not exist.");
+      }
+    });
   }
-);
+});
 
 // delete res file
 server.delete("/reservation/delete/user/:username", (req, res) => {

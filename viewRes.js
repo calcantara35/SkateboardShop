@@ -8,11 +8,11 @@ let selectedUser = null;
 // setting properties
 
 function displayUserReservation() {
-  selectedWord = document.querySelector("#wordBox").value;
-  if (selectedWord == null || selectedWord == "") {
+  selectedUser = document.querySelector("#wordBox").value;
+  if (selectedUser == null || selectedUser == "") {
     document.querySelector("#userReservation").innerHTML = "Please enter a username!";
   } else {
-    request.open("GET", `http://localhost:4500/reservation/user${selectedUser}`, true);
+    request.open("GET", `http://localhost:4500/reservation/user/${selectedUser}`, true);
 
     // specific whats gonna happen once we get data back | This is a callback function, excutes once we have data
     request.onload = function() {
@@ -21,24 +21,22 @@ function displayUserReservation() {
       console.log(userResData);
 
       if (request.status == 200) {
-        // displays reservations
-        let output = "";
-
         // looping through response data
-        resData.forEach(reservation => {
-          const reslist = document.getElementById("reservation-data");
+        userResData.forEach(reservation => {
+          const reslist = document.getElementById("userReservation");
+        
           // Create tr element
-          const row = document.createElement("tr");
+          const row = document.createElement("p");
           // insert cols
           row.innerHTML = `
-          <td>${reservation.name}</td>
-          <td>${reservation.date}</td>
-          <td>${reservation.time}</td>
-          <td>${reservation.hours}</td>
-          <td><a href='#' class='delete'>X</a></td>`;
+          <p>${reservation.name}</p>
+          <p>${reservation.date}</p>
+          <p>${reservation.time}</p>
+          <p>${reservation.hours}</p>`;
           reslist.appendChild(row);
+         
         });
-        // document.querySelector("#username").innerHTML = output;
+
         console.log("Success!");
       } else {
         console.log("An error occured");
