@@ -13,9 +13,6 @@ request.onload = function() {
   console.log(resData);
 
   if (request.status == 200) {
-    // displays reservations
-    let output = "";
-
     // looping through response data
     resData.forEach(reservation => {
       const reslist = document.getElementById("reservation-data");
@@ -26,11 +23,10 @@ request.onload = function() {
           <td>${reservation.name}</td>
           <td>${reservation.date}</td>
           <td>${reservation.time}</td>
-          <td>${reservation.hours}</td>
-          <td><a href='#' class='delete'>X</a></td>`;
+          <td>${reservation.hours}</td>`;
       reslist.appendChild(row);
     });
-    // document.querySelector("#username").innerHTML = output;
+
     console.log("Success!");
   } else {
     console.log("An error occured");

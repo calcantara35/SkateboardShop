@@ -32,7 +32,7 @@
     <input type="text" id="wordBox">
     <p></p>
     <label>Click on the button to confirm:</label>
-    <button id="wordButton" onclick="displayUserReservation();">Display User Reservation</button>
+    <button id="wordButton">Display User Reservation</button>
     <br>
     
 
@@ -52,6 +52,42 @@
     </div>
       
     </div>
+
+    
+    <div class="container mt-3">
+        <h2>Edit Reservation</h2>
+      </div>
+      <!-- Username -->
+      <div class="container mt-3">
+        <label class="label" id="userlabel" for="name">Username: </label>
+        <input class="inputVal" id="usernameVal" type="text" />
+      </div>
+      <!-- Date -->
+      <div class="container mt-3">
+        <label class="label" for="start">Start date:</ class="label">
+        <input
+        class="inputVal"
+          type="text"
+          id="dateVal"
+          placeholder="Format mm-dd-yy"
+          min="1-1-19"
+          max="12-31-99"
+        />
+      </div>
+      <div class="container mt-3">
+        <label class="label" for="time">Start Time: </label>
+        <input class="inputVal" id="timeVal" type="text" />
+      </div>
+      <div class="container mt-3">
+        <label class="label" for="hours">Hours: </label>
+        <input class="inputVal" id="hoursVal" type="text" />
+      </div>
+  
+      <div class="container mt-3">
+        <button href="#"  class="btn btn-success" id="submitBtn">Update</button>
+      </div>
+  
+      <div id="alertContainer" class="container mt-3"></div>
     <script src="viewRes.js"></script>
   </body>
 </html>

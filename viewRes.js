@@ -1,18 +1,26 @@
-// init xmlhttpreq
-let request = new XMLHttpRequest();
-
+// global vars
 let userResData = null;
 
 let selectedUser = null;
+//displayuser Reservation
 
-// setting properties
+const displayUserReservation = () => {
+  // init xmlhttpreq
+  let request = new XMLHttpRequest();
 
-function displayUserReservation() {
+  //clear data in table
+  clearItems();
+
   selectedUser = document.querySelector("#wordBox").value;
   if (selectedUser == null || selectedUser == "") {
-    document.querySelector("#userReservation").innerHTML = "Please enter a username!";
+    document.querySelector("#userReservation").innerHTML =
+      "Please enter a username!";
   } else {
-    request.open("GET", `http://localhost:4500/reservation/user/${selectedUser}`, true);
+    request.open(
+      "GET",
+      `http://localhost:4500/reservation/user/${selectedUser}`,
+      true
+    );
     // specific whats gonna happen once we get data back | This is a callback function, excutes once we have data
     request.onload = function() {
       // use this to refer the api
@@ -35,14 +43,16 @@ function displayUserReservation() {
           <td>${reservation.name}</td>
           <td>${reservation.date}</td>
           <td>${reservation.time}</td>
-          <td>${reservation.hours}</td>`;
+          <td>${reservation.hours}</td>
+          <td><a id='deleteIcon' href='#' class='delete'>X</a></td>`;
             reslist.appendChild(row);
             console.log(reslist);
           }
         });
 
         if (userExists === false) {
-          document.querySelector("#userReservation").innerHTML = "User does not exist!";
+          document.querySelector("#userReservation").innerHTML =
+            "User does not exist!";
         }
 
         console.log(userResData);
@@ -56,4 +66,27 @@ function displayUserReservation() {
     // last step
     request.send();
   }
+};
+
+const removeRes = () => {
+  let deleteRequest = new XMLHttpRequest();
+
+  deleteRequest.open(
+    "DELETE",
+    `http://localhost:4500/reservation/user/${selectedUser}`,
+    true
+  );
+
+  deleteRequest.onload = function() {};
+};
+
+function clearItems() {
+  document.querySelector("#userReservation").innerHTML = " ";
 }
+
+// event listeners
+document
+  .querySelector("#wordButton")
+  .addEventListener("click", displayUserReservation);
+
+document.querySelector("#deleteIcon").addEventListener("click", removeRes);
