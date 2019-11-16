@@ -186,45 +186,34 @@ server.get("/reservation/user/:username", (req, res) => {
   let userName = req.params.username;
   let userExists = false;
 
-  let userResList = [];
-  let stringUserResList;
+  // let userResList = [];
+  // let stringUserResList = "";
 
   if (!fs.existsSync(resFile)) {
-    res.write("User does not exist and there are no reservations at this time...");
+    console.log("User does not exist and there are no reservations at this time...");
   } else {
     fs.readFile(resFile, (err, data) => {
       if (err) throw err;
 
       let resFullList = JSON.parse(data);
+      let stringUserResList = JSON.stringify(resFullList);
+      console.log(stringUserResList);
+      res.end(stringUserResList);
+      console.log("final");
       // object now
-      resFullList.forEach((reservation, index) => {
-        if (reservation.name.toString() === userName) {
-          userResList.push(resFullList[index]);
-          console.log("geh");
-          console.log(userResList);
+      // resFullList.forEach((reservation, index) => {
+      //   if (reservation.name.toString() === userName) {
+      //     res.write(reservation);
+      //     // userResList.push(resFullList[index]);
+      //     // console.log("geh");
+      //     // console.log(userResList);
+      //   }
+      //   // res.end()
 
-          // res.write(JSON.stringify(resFullList[index]));
-
-          userExists === true;
-
-          stringUserResList = JSON.stringify(userResList);
-          // res.write(
-          //   JSON.stringify(
-          //     `Username: (${resFullList[index].name}\nReservation Date: ${resFullList[index].date}\nReservation Time: ${resFullList[index].time}\nReservation Duration: ${resFullList[index].hours}\n`
-          //   )
-          // );
-          res.end(stringUserResList);
-        }
-        // res.end()
-        console.log("final");
-        console.log(stringUserResList);
-      });
+      //   //console.log(stringUserResList);
+      // });
 
       // let resFullListString = JSON.stringify(resFullList);
-      if (userExists === false) {
-        res.send("User Does Not Exists");
-        res.end()
-      }
     });
   }
 });

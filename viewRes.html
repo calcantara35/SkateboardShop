@@ -36,7 +36,20 @@
     <br>
     
 
-    <div id="userReservation">
+    <div class="container">
+      <table class="table table-dark mt-3">
+        <thead>
+          <!-- Here we will be calling the /reservations/all -->
+          <tr id="appendToParent">
+            <th>Username</th>
+            <th>Date</th>
+            <th>Time</th>
+            <th>Hours</th>
+          </tr>
+        </thead>
+        <tbody id="userReservation"></tbody>
+      </table>
+    </div>
       
     </div>
     <script src="viewRes.js"></script>
