@@ -130,23 +130,8 @@ server.post("/reservation/new/user/:username/date/:startDate/time/:startTime/hou
         hours
       });
 
-<<<<<<< HEAD
-      // creating the Reservation.json file
-      fs.writeFile(resFile, JSON.stringify(resList), err => {
-        if (err) throw err;
-        console.log("Success");
-      });
-      res.send(
-        `New file has been created and the reservation for ${userName} has been added!`
-      );
-    } else {
-      // if it exists, read Reservation.json file
-      fs.readFile(resFile, (err, data) => {
-        if (err) throw err;
-=======
       // converting js object back to JSON object
       let appendResListInfo = JSON.stringify(appendResList);
->>>>>>> vidurcode
 
       // must be writefile or it will constantly create new objects
       fs.writeFile(resFile, appendResListInfo, err => {
