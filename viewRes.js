@@ -24,6 +24,7 @@ const displayUserReservation = () => {
     // specific whats gonna happen once we get data back | This is a callback function, excutes once we have data
     request.onload = function() {
       // use this to refer the api
+
       userResData = JSON.parse(this.response); // contains data from current object | Payload is this.response | parse turns it into a js object
       console.log(userResData);
 
@@ -44,7 +45,7 @@ const displayUserReservation = () => {
           <td>${reservation.date}</td>
           <td>${reservation.time}</td>
           <td>${reservation.hours}</td>
-          <td><a id='deleteIcon' href='#' class='delete'>X</a></td>`;
+          `;
             reslist.appendChild(row);
             console.log(reslist);
           }
@@ -52,7 +53,7 @@ const displayUserReservation = () => {
 
         if (userExists === false) {
           document.querySelector("#userReservation").innerHTML =
-            "User does not exist!";
+            "<td>User does not have any reservations!</td>";
         }
 
         console.log(userResData);
@@ -68,25 +69,36 @@ const displayUserReservation = () => {
   }
 };
 
-const removeRes = () => {
-  let deleteRequest = new XMLHttpRequest();
-
-  deleteRequest.open(
-    "DELETE",
-    `http://localhost:4500/reservation/user/${selectedUser}`,
-    true
-  );
-
-  deleteRequest.onload = function() {};
-};
-
 function clearItems() {
   document.querySelector("#userReservation").innerHTML = " ";
+}
+
+// function to remove alert message
+function removeMessage() {
+  document.querySelector("#alertmsg").innerHTML = "";
+}
+
+// funciton to show alert message
+function successMessage(msg) {
+  document.querySelector(
+    "#alertmsg"
+  ).innerHTML = `<div class="alertmsg" style="padding:1rem" role="alert">
+  <strong>Success!</strong> ${msg}!
+</div>`;
+  setTimeout(removeMessage, 3000);
+}
+
+// funciton to show alert message
+function warningMessage(msg) {
+  document.querySelector(
+    "#alertmsg"
+  ).innerHTML = `<div class="badalertmsg" style="padding:1rem" role="alert">
+  <strong>Oh no!</strong> ${msg}!
+</div>`;
+  setTimeout(removeMessage, 3000);
 }
 
 // event listeners
 document
   .querySelector("#wordButton")
   .addEventListener("click", displayUserReservation);
-
-document.querySelector("#deleteIcon").addEventListener("click", removeRes);

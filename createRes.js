@@ -19,7 +19,8 @@ const submitReservation = e => {
   );
 
   // specific whats gonna happen once we get data back | This is a callback function, excutes once we have data
-  request.onload = function() {
+  request.onload = function(e) {
+    e.preventDefault();
     // use this to refer the api
     resData = this.response; // contains data from current object | Payload is this.response | parse turns it into a js object
     console.log(resData);
