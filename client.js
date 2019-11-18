@@ -14,22 +14,31 @@ request.onload = function() {
 
   if (request.status == 200) {
     // looping through response data
-    resData.forEach(reservation => {
-      const reslist = document.getElementById("reservation-data");
-      // Create tr element
-      const row = document.createElement("tr");
-      // insert cols
-      row.innerHTML = `
-          <td>${reservation.name}</td>
-          <td>${reservation.date}</td>
-          <td>${reservation.time}</td>
-          <td>${reservation.hours}</td>`;
-      reslist.appendChild(row);
-    });
+    // how do you show that there are no reservations in the client
 
-    console.log("Success!");
+    if (!Array.isArray(resData) || !resData.length) {
+      let table = document.querySelector("#table");
+      table.innerHTML = "";
+      let noResAvail = document.querySelector("#noResAvail");
+      noResAvail.innerHTML = "<h1>No Reservations Available</h1>";
+    } else {
+      resData.forEach(reservation => {
+        const reslist = document.getElementById("reservation-data");
+        // Create tr element
+        const row = document.createElement("tr");
+        // insert cols
+        row.innerHTML = `
+            <td>${reservation.name}</td>
+            <td>${reservation.date}</td>
+            <td>${reservation.time}</td>
+            <td>${reservation.hours}</td>`;
+        reslist.appendChild(row);
+      });
+
+      console.log("Success!");
+    }
   } else {
-    console.log("An error occured");
+    console.log("Server Error");
   }
 };
 

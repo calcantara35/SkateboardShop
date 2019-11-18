@@ -6,11 +6,7 @@ const removeRes = e => {
   let deleteRequest = new XMLHttpRequest();
   let userTexboxVal = document.querySelector("#usernameVal").value;
 
-  deleteRequest.open(
-    "DELETE",
-    `http://localhost:4500/reservation/delete/user/${userTexboxVal}`,
-    true
-  );
+  deleteRequest.open("DELETE", `http://localhost:4500/reservation/delete/user/${userTexboxVal}`, true);
 
   // specific whats gonna happen once we get data back | This is a callback function, excutes once we have data
   deleteRequest.onload = function(e) {
@@ -19,8 +15,12 @@ const removeRes = e => {
     console.log(deleteResData);
 
     if (this.status == 200) {
-      successMessage("The reservation has been deleted from our system");
-      console.log("Success!");
+      if (deleteResData == "User does not exist.") {
+        warningMessage("The Reservation for this user does not exist");
+      } else {
+        successMessage("The reservation has been deleted from our system");
+        console.log("Success!");
+      }
     } else {
       console.log("An error occured");
     }
@@ -31,28 +31,28 @@ const removeRes = e => {
 };
 
 // function to remove alert message
-function removeMessage() {
+function removeSuccessMessage() {
+  document.querySelector("#alertmsg").innerHTML = "";
+}
+
+function removeBadMessage() {
   document.querySelector("#alertmsg").innerHTML = "";
 }
 
 // funciton to show alert message
 function successMessage(msg) {
-  document.querySelector(
-    "#alertmsg"
-  ).innerHTML = `<div class="alertmsg" style="padding:1rem" role="alert">
+  document.querySelector("#alertmsg").innerHTML = `<div class="alertmsg" style="padding:1rem" role="alert">
   <strong>Success!</strong> ${msg}!
 </div>`;
-  setTimeout(removeMessage, 3000);
+  setTimeout(removeSuccessMessage, 3000);
 }
 
 // funciton to show alert message
 function warningMessage(msg) {
-  document.querySelector(
-    "#alertmsg"
-  ).innerHTML = `<div class="badalertmsg" style="padding:1rem" role="alert">
+  document.querySelector("#badalertmsg").innerHTML = `<div class="badalertmsg" style="padding:1rem" role="alert">
   <strong>Oh no!</strong> ${msg}!
 </div>`;
-  setTimeout(removeMessage, 3000);
+  setTimeout(removeBadMessage, 3000);
 }
 
 // event listeners

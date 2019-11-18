@@ -12,11 +12,7 @@ const updateReservation = e => {
   let resData = null;
 
   // setting properties
-  request.open(
-    "PUT",
-    `http://localhost:4500/reservation/update/user/${userTexboxVal}/date/${dateTexboxVal}/time/${timeTexboxVal}/hours/${hoursTexboxVal}`,
-    true
-  );
+  request.open("PUT", `http://localhost:4500/reservation/update/user/${userTexboxVal}/date/${dateTexboxVal}/time/${timeTexboxVal}/hours/${hoursTexboxVal}`, true);
 
   // specific whats gonna happen once we get data back | This is a callback function, excutes once we have data
   request.onload = function() {
@@ -25,21 +21,21 @@ const updateReservation = e => {
     console.log(resData);
 
     if (request.status == 200) {
-      let alertContainer = document.querySelector("#alertContainer");
-      let alert = document.createElement("h2");
-      let alertContent = document.createTextNode(
-        "Thank you for updating your reservation with us!"
-      );
+      if (resData == "User does not exist.") {
+        warningMessage("The Reservation cannot be updated as the user does not exist");
+      } else {
+        let alertContainer = document.querySelector("#alertContainer");
+        let alert = document.createElement("h2");
+        let alertContent = document.createTextNode("Thank you for updating your reservation with us!");
 
-      alert.appendChild(alertContent);
+        alert.appendChild(alertContent);
 
-      alertContainer.appendChild(alert);
+        alertContainer.appendChild(alert);
+      }
     } else {
       let alertContainer = document.querySelector("#alertContainer");
       let alert = document.createElement("h2");
-      let alertContent = document.createTextNode(
-        "Opps! Sorry! Our system is currently down. Please com back later!"
-      );
+      let alertContent = document.createTextNode("Opps! Sorry! Our system is currently down. Please come back later!");
 
       alert.appendChild(alertContent);
 
@@ -53,6 +49,29 @@ const updateReservation = e => {
   request.send();
 };
 
-document
-  .querySelector("#submitBtn")
-  .addEventListener("click", updateReservation);
+// function to remove alert message
+function removeSuccessMessage() {
+  document.querySelector("#alertmsg").innerHTML = "";
+}
+
+function removeBadMessage() {
+  document.querySelector("#badalertmsg").innerHTML = "";
+}
+
+// funciton to show alert message
+function successMessage(msg) {
+  document.querySelector("#alertmsg").innerHTML = `<div class="alertmsg" style="padding:1rem" role="alert">
+  <strong>Success!</strong> ${msg}!
+</div>`;
+  setTimeout(removeSuccessMessage, 3000);
+}
+
+// funciton to show alert message
+function warningMessage(msg) {
+  document.querySelector("#badalertmsg").innerHTML = `<div class="badalertmsg" style="padding:1rem" role="alert">
+  <strong>Oh no!</strong> ${msg}!
+</div>`;
+  setTimeout(removeBadMessage, 3000);
+}
+
+document.querySelector("#submitBtn").addEventListener("click", updateReservation);

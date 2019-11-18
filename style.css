@@ -115,7 +115,7 @@ tr:hover {
   border-radius: 1rem;
 }
 
-.badalertmsg {
+#badalertmsg {
   background-color: rgb(146, 21, 21);
   color: white;
   border: 0.034rem rgb(146, 21, 21) transparent;
