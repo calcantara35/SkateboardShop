@@ -106,3 +106,18 @@ tr:hover {
 .navbar-items {
   display: flex;
 }
+
+/* Alert Message */
+#alertmsg {
+  background-color: rgb(55, 160, 78);
+  color: white;
+  border: 0.034rem rgb(55, 160, 78) transparent;
+  border-radius: 1rem;
+}
+
+.badalertmsg {
+  background-color: rgb(146, 21, 21);
+  color: white;
+  border: 0.034rem rgb(146, 21, 21) transparent;
+  border-radius: 1rem;
+}

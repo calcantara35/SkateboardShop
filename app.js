@@ -85,25 +85,6 @@ server.post(
     let startTime = req.params.startTime;
     let hours = req.params.resHours;
 
-    //boolean var for validation
-    // let userExists = false;
-
-    // fs.readFile(usersFile, (err, data) => {
-    //   if (err) throw err;
-    //   let existingUser = JSON.parse(data);
-    //   existingUser.forEach(user => {
-    //     if (user.name.toString() === userName) {
-    //       userExists = true;
-    //     } else {
-    //       res.end(
-    //         "User does not exist, please create new user or make sure the username is correct!"
-    //       );
-    //     }
-    //   });
-    // });
-
-    // if (userExists === true) {
-
     // checking to see if the file exists
     if (!fs.existsSync(resFile)) {
       // adding new user to empty object
@@ -127,6 +108,25 @@ server.post(
       fs.readFile(resFile, (err, data) => {
         if (err) throw err;
 
+        // ask professor
+        // if (data === null || data === undefined || data === "") {
+        //   resList.push({
+        //     name: userName,
+        //     date: startDate,
+        //     time: startTime,
+        //     hours
+        //   });
+
+        //   // creating the Reservation.json file
+        //   fs.writeFile(resFile, JSON.stringify(resList), err => {
+        //     if (err) throw err;
+        //     console.log("Success");
+        //   });
+        //   res.write(
+        //     `New file has been created and the reservation for ${userName} has been added!`
+        //   );
+        // }
+
         // parsing through existing data and putting it in a variable and converting JSON object to JS object
         let appendResList = JSON.parse(data);
 
@@ -144,7 +144,7 @@ server.post(
         // must be writefile or it will constantly create new objects
         fs.writeFile(resFile, appendResListInfo, err => {
           if (err) throw err;
-          console.log("Success!");
+          console.log("cock Success!");
         });
       });
       res.send(`Reservation for ${userName} has been added to system.`);
@@ -211,20 +211,6 @@ server.get("/reservation/user/:username", (req, res) => {
       console.log(stringUserResList);
       res.end(stringUserResList);
       console.log("final");
-      // object now
-      // resFullList.forEach((reservation, index) => {
-      //   if (reservation.name.toString() === userName) {
-      //     res.write(reservation);
-      //     // userResList.push(resFullList[index]);
-      //     // console.log("geh");
-      //     // console.log(userResList);
-      //   }
-      //   // res.end()
-
-      //   //console.log(stringUserResList);
-      // });
-
-      // let resFullListString = JSON.stringify(resFullList);
     });
   }
 });
@@ -273,13 +259,13 @@ server.put(
 );
 
 // delete res file
-server.delete("/reservation/delete/user/:username", (req, res) => {
+server.delete("/reservation/delete/user/:username/", (req, res) => {
   let userName = req.params.username;
 
   let userExists = false;
 
   if (!fs.existsSync(resFile)) {
-    res.end("There is no data for reservations.");
+    console.log("There is no data for reservations.");
   } else {
     fs.readFile(resFile, (err, data) => {
       if (err) throw err;
@@ -298,7 +284,7 @@ server.delete("/reservation/delete/user/:username", (req, res) => {
             console.log("Updated File");
           });
 
-          res.send(`${userName}'s reservation was deleted.`);
+          res.end(`${userName}'s reservation was deleted.`);
         }
       });
       if (userExists === false) {

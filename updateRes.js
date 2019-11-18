@@ -13,8 +13,8 @@ const updateReservation = e => {
 
   // setting properties
   request.open(
-    "POST",
-    `http://localhost:4500/reservation/new/user/${userTexboxVal}/date/${dateTexboxVal}/time/${timeTexboxVal}/hours/${hoursTexboxVal}`,
+    "PUT",
+    `http://localhost:4500/reservation/update/user/${userTexboxVal}/date/${dateTexboxVal}/time/${timeTexboxVal}/hours/${hoursTexboxVal}`,
     true
   );
 
