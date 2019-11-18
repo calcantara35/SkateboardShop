@@ -100,25 +100,6 @@ server.post("/reservation/new/user/:username/date/:startDate/time/:startTime/hou
     fs.readFile(resFile, (err, data) => {
       if (err) throw err;
 
-      // ask professor
-      // if (data === null || data === undefined || data === "") {
-      //   resList.push({
-      //     name: userName,
-      //     date: startDate,
-      //     time: startTime,
-      //     hours
-      //   });
-
-      //   // creating the Reservation.json file
-      //   fs.writeFile(resFile, JSON.stringify(resList), err => {
-      //     if (err) throw err;
-      //     console.log("Success");
-      //   });
-      //   res.write(
-      //     `New file has been created and the reservation for ${userName} has been added!`
-      //   );
-      // }
-
       // parsing through existing data and putting it in a variable and converting JSON object to JS object
       let appendResList = JSON.parse(data);
 
@@ -152,53 +133,50 @@ server.get("/reservations/all", (req, res) => {
       if (err) throw err;
       console.log("No Reservations Available");
     });
-  }
+  } else {
+    fs.readFile(resFile, (err, data) => {
+      if (err) throw err;
+      let completeResFile = JSON.parse(data);
 
-  fs.readFile(resFile, (err, data) => {
-    if (err) throw err;
-    let completeResFile = JSON.parse(data);
+      completeResFile.sort((res1, res2) => {
+        if (res1.date > res2.date) return 1;
+        if (res1.date < res2.date) return -1;
 
-    completeResFile.sort((res1, res2) => {
-      if (res1.date > res2.date) return 1;
-      if (res1.date < res2.date) return -1;
+        if (res1.time > res2.time) return 1;
+        if (res1.time > res2.time) return -1;
+      });
 
-      if (res1.time > res2.time) return 1;
-      if (res1.time > res2.time) return -1;
+      console.log(completeResFile);
+
+      let sortedResFile = JSON.stringify(completeResFile);
+
+      res.end(sortedResFile);
+
+      // debating if we should do fs.write and make the actual json file sorted chronologically. It is not a requirement, just the data has to be chronological.
+
+      console.log("success!");
     });
-
-    console.log(completeResFile);
-
-    let sortedResFile = JSON.stringify(completeResFile);
-
-    res.end(sortedResFile);
-
-    // debating if we should do fs.write and make the actual json file sorted chronologically. It is not a requirement, just the data has to be chronological.
-
-    console.log("success!");
-  });
+  }
 });
 
 // Retrieve the reservation info for a given user (if they have one)
 server.get("/reservation/user/:username", (req, res) => {
-  let userName = req.params.username;
-  let userExists = false;
-
-  // let userResList = [];
-  // let stringUserResList = "";
-
   if (!fs.existsSync(resFile)) {
-    console.log("User does not exist and there are no reservations at this time...");
-  } else {
-    fs.readFile(resFile, (err, data) => {
+    let arrayList = JSON.stringify(resList);
+    fs.writeFile(resFile, arrayList, err => {
       if (err) throw err;
-
-      let resFullList = JSON.parse(data);
-      let stringUserResList = JSON.stringify(resFullList);
-      console.log(stringUserResList);
-      res.end(stringUserResList);
-      console.log("final");
+      console.log("User does not exist and there are no reservations at this time...");
     });
-  }
+  } //else {
+  fs.readFile(resFile, (err, data) => {
+    if (err) throw err;
+
+    let resFullList = JSON.parse(data);
+    let stringUserResList = JSON.stringify(resFullList);
+    console.log(stringUserResList);
+    res.end(stringUserResList);
+  });
+  //}
 });
 
 // update reservation for a given user
@@ -211,34 +189,38 @@ server.put("/reservation/update/user/:username/date/:startDate/time/:startTime/h
   let userExists = false;
 
   if (!fs.existsSync(resFile)) {
-    res.end("There is no data for reservations.");
-  } else {
-    fs.readFile(resFile, (err, data) => {
+    let arrayList = JSON.stringify(resList);
+    fs.writeFile(resFile, arrayList, err => {
       if (err) throw err;
-      let fullResList = JSON.parse(data);
+      res.end("There is no data for reservations.");
+    });
+  } //else {
+  fs.readFile(resFile, (err, data) => {
+    if (err) throw err;
+    let fullResList = JSON.parse(data);
 
-      fullResList.forEach((reservation, index) => {
-        if (reservation.name.toString() === userName) {
-          fullResList[index].date = startDate;
-          fullResList[index].time = startTime;
-          fullResList[index].hours = hours;
+    fullResList.forEach((reservation, index) => {
+      if (reservation.name.toString() === userName) {
+        fullResList[index].date = startDate;
+        fullResList[index].time = startTime;
+        fullResList[index].hours = hours;
 
-          let convertResList = JSON.stringify(fullResList);
-          res.send(`Reservation: ${convertResList}`);
+        let convertResList = JSON.stringify(fullResList);
+        res.send(`Reservation: ${convertResList}`);
 
-          userExists = true;
+        userExists = true;
 
-          fs.writeFile(resFile, convertResList, err => {
-            if (err) throw err;
-            console.log("Updated File");
-          });
-        }
-      });
-      if (userExists === false) {
-        res.end("User does not exist.");
+        fs.writeFile(resFile, convertResList, err => {
+          if (err) throw err;
+          console.log("Updated File");
+        });
       }
     });
-  }
+    if (userExists === false) {
+      res.end("User does not exist.");
+    }
+  });
+  // }
 });
 
 // delete res file
@@ -248,33 +230,37 @@ server.delete("/reservation/delete/user/:username/", (req, res) => {
   let userExists = false;
 
   if (!fs.existsSync(resFile)) {
-    console.log("There is no data for reservations.");
-  } else {
-    fs.readFile(resFile, (err, data) => {
+    let arrayList = JSON.stringify(resList);
+    fs.writeFile(resFile, arrayList, err => {
       if (err) throw err;
-      let fullResList = JSON.parse(data);
+      console.log("There is no data for reservations.");
+    });
+  } //else {
+  fs.readFile(resFile, (err, data) => {
+    if (err) throw err;
+    let fullResList = JSON.parse(data);
 
-      fullResList.forEach((reservation, index) => {
-        if (reservation.name.toString() === userName) {
-          fullResList.splice(index, 1);
+    fullResList.forEach((reservation, index) => {
+      if (reservation.name.toString() === userName) {
+        fullResList.splice(index, 1);
 
-          let convertResList = JSON.stringify(fullResList);
+        let convertResList = JSON.stringify(fullResList);
 
-          userExists = true;
+        userExists = true;
 
-          fs.writeFile(resFile, convertResList, err => {
-            if (err) throw err;
-            console.log("Updated File");
-          });
+        fs.writeFile(resFile, convertResList, err => {
+          if (err) throw err;
+          console.log("Updated File");
+        });
 
-          res.end(`${userName}'s reservation was deleted.`);
-        }
-      });
-      if (userExists === false) {
-        res.end("User does not exist.");
+        res.end(`${userName}'s reservation was deleted.`);
       }
     });
-  }
+    if (userExists === false) {
+      res.end("User does not exist.");
+    }
+  });
+  // }
 });
 
 server.listen(port, () => {
